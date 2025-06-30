@@ -26,7 +26,7 @@ client_secret_key = os.getenv("CLIENT_SECRET")
 audience = f"https://{domain}/api/v2/"
 
 # Excel生成開始メッセージ
-show_message("処理開始", "Excelファイルの生成を開始します。")
+# show_message("処理開始", "Excelファイルの生成を開始します。")
 
 # Token取得
 url = f'https://{domain}/oauth/token'
@@ -101,4 +101,4 @@ with requests.Session() as session:
     df_all.to_excel(f_path, index=False)
 
     # 完了メッセージ
-    show_message("完了", f"Excelファイルを保存しました:\n{f_path}")
+    # show_message("完了", f"Excelファイルを保存しました:\n{f_path}")
