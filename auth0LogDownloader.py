@@ -49,10 +49,16 @@ with requests.Session() as session:
     config = configparser.ConfigParser()
     config.read('last_log_id.ini')
 
+    # if 'DEFAULT' in config and 'last_log_id' in config['DEFAULT']:
+    #      log_id = config['DEFAULT']['last_log_id']
+    # else:
+    #      log_id = input("最後に取得したLogIDを入力してください：")
+
     if 'DEFAULT' in config and 'last_log_id' in config['DEFAULT']:
         log_id = config['DEFAULT']['last_log_id']
     else:
-        log_id = input("最後に取得したLogIDを入力してください：")
+        show_message("エラー", "last_log_id.ini に 'last_log_id' が設定されていません。")
+        sys.exit(1)
 
     params = {'from': log_id, 'take': 100}
     logs_list = []
