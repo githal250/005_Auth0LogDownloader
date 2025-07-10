@@ -25,9 +25,6 @@ client_id = os.getenv("CLIENT_ID")
 client_secret_key = os.getenv("CLIENT_SECRET")
 audience = f"https://{domain}/api/v2/"
 
-# Excel生成開始メッセージ
-# show_message("処理開始", "Excelファイルの生成を開始します。")
-
 # Token取得
 url = f'https://{domain}/oauth/token'
 headers = {'Content-Type': 'application/json'}
@@ -49,15 +46,10 @@ with requests.Session() as session:
     config = configparser.ConfigParser()
     config.read('last_log_id.ini')
 
-    # if 'DEFAULT' in config and 'last_log_id' in config['DEFAULT']:
-    #      log_id = config['DEFAULT']['last_log_id']
-    # else:
-    #      log_id = input("最後に取得したLogIDを入力してください：")
-
-    if 'DEFAULT' in config and 'last_log_id' in config['DEFAULT']:
-        log_id = config['DEFAULT']['last_log_id']
+    if 'DEFAULT' in config and 'last-log-id' in config['DEFAULT']:
+        log_id = config['DEFAULT']['last-log-id']
     else:
-        show_message("エラー", "last_log_id.ini に 'last_log_id' が設定されていません。")
+        show_message("エラー", "last_log_id.ini に 'last-log-id' が設定されていません。")
         sys.exit(1)
 
     params = {'from': log_id, 'take': 100}
@@ -86,7 +78,7 @@ with requests.Session() as session:
     df_all = pd.DataFrame(logs_list, columns=log_columns)
 
     last_log_id = df_all.iloc[-1]['log_id'] if df_all.shape[0] > 0 else "ぴったりでした"
-    config['DEFAULT']['last_log_id'] = last_log_id
+    config['DEFAULT']['last-log-id'] = last_log_id
     with open('last_log_id.ini', 'w') as configfile:
         config.write(configfile)
 
@@ -106,5 +98,3 @@ with requests.Session() as session:
     f_path = os.path.join(output_dir, filename)
     df_all.to_excel(f_path, index=False)
 
-    # 完了メッセージ
-    # show_message("完了", f"Excelファイルを保存しました:\n{f_path}")
